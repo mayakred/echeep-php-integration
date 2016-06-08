@@ -76,6 +76,14 @@ class Promotion
     protected $expiresAt;
 
     /**
+     * Promotion constructor.
+     */
+    public function __construct()
+    {
+        $this->organizations = [];
+    }
+
+    /**
      * @return int
      */
     public function getId()
