@@ -8,6 +8,7 @@
  */
 namespace MayakRed\ECheepIntegration\Request;
 
+use MayakRed\ECheepIntegration\Exception\NotEnoughDataException;
 use MayakRed\ECheepIntegration\Model\UserPromotion;
 
 class SaleByUserPromotion extends Sale
@@ -16,6 +17,25 @@ class SaleByUserPromotion extends Sale
      * @var UserPromotion
      */
     protected $userPromotion;
+
+    /**
+     * @return array
+     */
+    public function serialize()
+    {
+        $parentData = parent::serialize();
+
+        if ($this->userPromotion === null) {
+            throw new NotEnoughDataException('userPromotion is null');
+        }
+        if ($this->userPromotion->getId() === null) {
+            throw new NotEnoughDataException('userPromotion->id is null');
+        }
+
+        $parentData['id'] = $this->userPromotion->getId();
+
+        return $parentData;
+    }
 
     /**
      * @return UserPromotion

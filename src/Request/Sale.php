@@ -26,6 +26,18 @@ abstract class Sale
     protected $profit;
 
     /**
+     * @return array
+     */
+    public function serialize()
+    {
+        return [
+            'value_modifier' => $this->valueModifier,
+            'profit' => $this->profit,
+            'price' => $this->price,
+        ];
+    }
+
+    /**
      * @return float
      */
     public function getValueModifier()
