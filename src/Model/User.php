@@ -41,6 +41,24 @@ class User
     protected $isConfirmed;
 
     /**
+     * @param \stdClass $data
+     *
+     * @return User
+     */
+    public static function createFromStdClass(\stdClass $data)
+    {
+        $user = new self();
+        $user->setId($data->id)
+            ->setFirstName($data->first_name)
+            ->setMiddleName($data->middle_name)
+            ->setLastName($data->last_name)
+            ->setGender($data->gender)
+            ->setIsConfirmed($data->is_confirmed);
+
+        return $user;
+    }
+
+    /**
      * @return int
      */
     public function getId()
