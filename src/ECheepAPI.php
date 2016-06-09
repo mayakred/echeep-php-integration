@@ -7,6 +7,7 @@ use Httpful\Request as HTTPRequest;
 use Httpful\Response;
 use MayakRed\ECheepIntegration\Exception\BaseException;
 use MayakRed\ECheepIntegration\Exception\NotAnAPIResponseException;
+use MayakRed\ECheepIntegration\Model\Promotion;
 use MayakRed\ECheepIntegration\Model\User;
 use MayakRed\ECheepIntegration\Model\UserPromotion;
 use MayakRed\ECheepIntegration\Request\Sale;
@@ -29,6 +30,7 @@ class ECheepAPI implements ECheepAPIInterface
     const USER_BY_PHONE_CONFIRM = '/user/phone/confirm';
     const USER_BY_CHIP = '/user/chip';
     const USER_PROMOTIONS = '/user/%s/promotions';
+    const PROMOTIONS = '/promotions';
 
     /**
      * @var string
@@ -187,6 +189,16 @@ class ECheepAPI implements ECheepAPIInterface
      */
     public function getOrganizationPromotions()
     {
-        // TODO: Implement getOrganizationPromotions() method.
+        $response = $this->prepareRequest(Http::GET, $this->getUrl(self::PROMOTIONS))
+            ->send();
+
+        $data = $this->getSuccessData($response);
+
+        $result = [];
+        foreach ($data as $promotionData) {
+            $result[] = Promotion::createFromStdClass($promotionData);
+        }
+
+        return $result;
     }
 }

@@ -44,7 +44,18 @@ function sampleUserPromotions(ECheepAPIInterface $api)
     return $api->getUserPromotions($user);
 }
 
+/**
+ * @param ECheepAPIInterface $api
+ *
+ * @return \MayakRed\ECheepIntegration\Model\Promotion[]
+ */
+function sampleOrganizationPromotions(ECheepAPIInterface $api)
+{
+    return $api->getOrganizationPromotions();
+}
+
 $api = new ECheepAPI('echeep.mayakdev.ru', 'dns-shop-central-api-key');
 
-$userPromotions = sampleUserPromotions($api);
+$promotions = sampleOrganizationPromotions($api);
+var_dump($promotions);
 
