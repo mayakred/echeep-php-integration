@@ -2,6 +2,12 @@
 
 namespace MayakRed\ECheepIntegration;
 
+use Httpful\Http;
+use Httpful\Request as HTTPRequest;
+use Httpful\Response;
+use MayakRed\ECheepIntegration\Exception\BaseException;
+use MayakRed\ECheepIntegration\Exception\NotAnAPIResponseException;
+use MayakRed\ECheepIntegration\Model\User;
 use MayakRed\ECheepIntegration\Request\Sale;
 use MayakRed\ECheepIntegration\Request\UserPromotionIssuance;
 
@@ -15,6 +21,12 @@ use MayakRed\ECheepIntegration\Request\UserPromotionIssuance;
  */
 class ECheepAPI implements ECheepAPIInterface
 {
+    const INTEGRATION_PREFIX = '/api/integration';
+    const API_VERSION = 1;
+
+    const USER_BY_PHONE_REQUEST = '/user/phone/request';
+    const USER_BY_PHONE_CONFIRM = '/user/phone/confirm';
+
     /**
      * @var string
      */
@@ -38,11 +50,63 @@ class ECheepAPI implements ECheepAPIInterface
     }
 
     /**
+     * @param $url
+     * @param array $params
+     *
+     * @return string
+     */
+    protected function getUrl($url, $params = [])
+    {
+        $baseUrl = $this->url . self::INTEGRATION_PREFIX . '/v' . self::API_VERSION . $url;
+        if (count($params) > 0) {
+            $baseUrl .= '?' . http_build_query($params);
+        }
+
+        return $baseUrl;
+    }
+
+    protected function prepareRequest($method, $url)
+    {
+        return HTTPRequest::init($method)
+            ->addHeader('Authorization', "TOKEN token=\"{$this->apiKey}\"")
+            ->addHeader('Content-Type', 'application/json')
+            ->uri($url);
+    }
+
+    /**
+     * @param Response $response
+     *
+     * @return mixed
+     */
+    protected function getSuccessData(Response $response)
+    {
+        $body = $response->body;
+        if (!property_exists($body, 'status') || !property_exists($body, 'data')) {
+            throw new NotAnAPIResponseException();
+        }
+
+        $status = $body->status;
+        $data = $body->data;
+
+        if ($status !== 'Success') {
+            throw new BaseException($status, $response->code);
+        }
+
+        return $data;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getUserByPhoneRequest($phone)
     {
-        // TODO: Implement getUserByPhoneRequest() method.
+        $url = $this->getUrl(self::USER_BY_PHONE_REQUEST, ['phone' => $phone]);
+        $response = $this->prepareRequest(Http::GET, $url)
+            ->send();
+
+        $this->getSuccessData($response);
+
+        return true;
     }
 
     /**
@@ -50,7 +114,13 @@ class ECheepAPI implements ECheepAPIInterface
      */
     public function getUserByPhoneConfirm($phone, $code)
     {
-        // TODO: Implement getUserByPhoneConfirm() method.
+        $url = $this->getUrl(self::USER_BY_PHONE_CONFIRM, ['phone' => $phone, 'code' => $code]);
+        $response = $this->prepareRequest(Http::GET, $url)
+            ->send();
+
+        $data = $this->getSuccessData($response);
+
+        return User::createFromStdClass($data);
     }
 
     /**
