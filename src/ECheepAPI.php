@@ -31,6 +31,7 @@ class ECheepAPI implements ECheepAPIInterface
     const USER_BY_CHIP = '/user/chip';
     const USER_PROMOTIONS = '/user/%s/promotions';
     const PROMOTIONS = '/promotions';
+    const SALE = '/sale';
 
     /**
      * @var string
@@ -153,7 +154,14 @@ class ECheepAPI implements ECheepAPIInterface
      */
     public function registerSale(Sale $sale)
     {
-        // TODO: Implement registerSale() method.
+        $data = $sale->serialize();
+        $response = $this->prepareRequest(Http::POST, $this->getUrl(self::SALE))
+            ->body($data, 'application/json')
+            ->send();
+
+        $this->getSuccessData($response);
+
+        return true;
     }
 
     /**
