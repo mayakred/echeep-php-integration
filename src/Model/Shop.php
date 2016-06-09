@@ -31,6 +31,23 @@ class Shop
     protected $address;
 
     /**
+     * @param \stdClass $data
+     *
+     * @return Shop
+     */
+    public static function createFromStdClass(\stdClass $data)
+    {
+        $shop = new self();
+        $shop
+            ->setId($data->id)
+            ->setName($data->name)
+            ->setCity(City::createFromStdClass($data->city))
+            ->setAddress($data->address);
+
+        return $shop;
+    }
+
+    /**
      * @return int
      */
     public function getId()

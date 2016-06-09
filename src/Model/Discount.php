@@ -31,6 +31,23 @@ class Discount
     protected $maxValue;
 
     /**
+     * @param \stdClass $data
+     *
+     * @return Discount
+     */
+    public static function createFromStdClass(\stdClass $data)
+    {
+        $discount = new self();
+        $discount
+            ->setId($data->id)
+            ->setIsAccumulative($data->is_accumulative)
+            ->setMinValue($data->min_value)
+            ->setMaxValue($data->max_value);
+
+        return $discount;
+    }
+
+    /**
      * @return int
      */
     public function getId()

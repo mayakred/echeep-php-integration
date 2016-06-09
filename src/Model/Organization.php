@@ -26,6 +26,25 @@ class Organization
     protected $shops;
 
     /**
+     * @param \stdClass $data
+     *
+     * @return Organization
+     */
+    public static function createFromStdClass(\stdClass $data)
+    {
+        $organization = new self();
+        $organization
+            ->setId($data->id)
+            ->setName($data->name);
+
+        foreach ($data->shops as $shopData) {
+            $organization->addShop(Shop::createFromStdClass($shopData));
+        }
+
+        return $organization;
+    }
+
+    /**
      * Organization constructor.
      */
     public function __construct()

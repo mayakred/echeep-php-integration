@@ -21,6 +21,21 @@ class Coupon
     protected $value;
 
     /**
+     * @param \stdClass $data
+     *
+     * @return Coupon
+     */
+    public static function createFromStdClass(\stdClass $data)
+    {
+        $coupon = new self();
+        $coupon
+            ->setId($data->id)
+            ->setValue($data->value);
+
+        return $coupon;
+    }
+
+    /**
      * @return int
      */
     public function getId()

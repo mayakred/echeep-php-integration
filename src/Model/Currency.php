@@ -46,6 +46,26 @@ class Currency
     protected $systemWide;
 
     /**
+     * @param \stdClass $data
+     *
+     * @return Currency
+     */
+    public static function createFromStdClass(\stdClass $data)
+    {
+        $currency = new self();
+        $currency
+            ->setId($data->id)
+            ->setShortName($data->short_name)
+            ->setNominativeCasePlural($data->nominative_case_plural)
+            ->setNominativeCaseSingular($data->nominative_case_singular)
+            ->setGenitiveCasePlural($data->genitive_case_plural)
+            ->setGenitiveCaseSingular($data->genitive_case_singular)
+            ->setSystemWide($data->system_wide);
+
+        return $currency;
+    }
+
+    /**
      * @return int
      */
     public function getId()

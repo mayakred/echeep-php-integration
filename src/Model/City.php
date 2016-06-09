@@ -31,6 +31,23 @@ class City
     protected $name;
 
     /**
+     * @param \stdClass $data
+     *
+     * @return City
+     */
+    public static function createFromStdClass(\stdClass $data)
+    {
+        $city = new self();
+        $city
+            ->setId($data->id)
+            ->setLat($data->lat)
+            ->setLon($data->lon)
+            ->setName($data->name);
+
+        return $city;
+    }
+
+    /**
      * @return int
      */
     public function getId()

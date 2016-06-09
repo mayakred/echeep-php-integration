@@ -76,6 +76,45 @@ class Promotion
     protected $expiresAt;
 
     /**
+     * @param \stdClass $data
+     *
+     * @return Promotion
+     */
+    public static function createFromStdClass(\stdClass $data)
+    {
+        $promotion = new self();
+        $promotion
+            ->setId($data->id)
+            ->setAlias($data->alias)
+            ->setName($data->name)
+            ->setType($data->type)
+            ->setDescription($data->description)
+            ->setNeedProof($data->need_proof)
+            ->setOrganizationOwnerId($data->organization_owner_id);
+
+        if ($data->coupon !== null) {
+            $promotion->setCoupon(Coupon::createFromStdClass($data->coupon));
+        }
+        if ($data->bonus_program !== null) {
+            $promotion->setBonusProgram(Bonus::createFromStdClass($data->bonus_program));
+        }
+        if ($data->discount !== null) {
+            $promotion->setDiscount(Discount::createFromStdClass($data->discount));
+        }
+        if ($data->currency !== null) {
+            $promotion->setCurrency(Currency::createFromStdClass($data->currency));
+        }
+        if ($data->expires_at !== null) {
+            $promotion->setExpiresAt((new \DateTime(null, new \DateTimeZone('UTC')))->setTimestamp($data->expires_at));
+        }
+        foreach ($data->organizations as $organizationData) {
+            $promotion->addOrganization(Organization::createFromStdClass($organizationData));
+        }
+
+        return $promotion;
+    }
+
+    /**
      * Promotion constructor.
      */
     public function __construct()
@@ -289,6 +328,14 @@ class Promotion
     public function getOrganizations()
     {
         return $this->organizations;
+    }
+
+    /**
+     * @param Organization $organization
+     */
+    public function addOrganization(Organization $organization)
+    {
+        $this->organizations[] = $organization;
     }
 
     /**

@@ -16,6 +16,19 @@ class Bonus
     protected $id;
 
     /**
+     * @param \stdClass $data
+     *
+     * @return Bonus
+     */
+    public static function createFromStdClass(\stdClass $data)
+    {
+        $bonus = new self();
+        $bonus->setId($data->id);
+
+        return $bonus;
+    }
+
+    /**
      * @return int
      */
     public function getId()

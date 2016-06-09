@@ -36,6 +36,27 @@ class UserPromotion
     protected $expiresAt;
 
     /**
+     * @param \stdClass $data
+     *
+     * @return UserPromotion
+     */
+    public static function createFromStdClass(\stdClass $data)
+    {
+        $userPromotion = new self();
+        $userPromotion
+            ->setId($data->id)
+            ->setPromotion(Promotion::createFromStdClass($data->promotion))
+            ->setRealValue($data->real_value)
+            ->setAuthData($data->auth_data);
+
+        if ($data->expires_at !== null) {
+            $userPromotion->setExpiresAt((new \DateTime(null, new \DateTimeZone('UTC')))->setTimestamp($data->expires_at));
+        }
+
+        return $userPromotion;
+    }
+
+    /**
      * @return int
      */
     public function getId()
