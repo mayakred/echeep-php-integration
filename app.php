@@ -6,6 +6,7 @@ use MayakRed\ECheepIntegration\ECheepAPI;
 use MayakRed\ECheepIntegration\ECheepAPIInterface;
 use MayakRed\ECheepIntegration\Request\SaleByPromotionAndUser;
 use MayakRed\ECheepIntegration\Request\SaleByUserPromotion;
+use MayakRed\ECheepIntegration\Request\UserPromotionIssuance;
 
 /**
  * @param ECheepAPIInterface $api
@@ -14,7 +15,7 @@ use MayakRed\ECheepIntegration\Request\SaleByUserPromotion;
  */
 function sampleUserByPhone(ECheepAPIInterface $api)
 {
-    $phone = '+70000000000';
+    $phone = '+70000000001';
     $code = 12345;
     $api->getUserByPhoneRequest($phone);
     $user = $api->getUserByPhoneConfirm($phone, $code);
@@ -94,7 +95,26 @@ function sampleSaleByPromotionAndUser(ECheepAPIInterface $api)
     return $api->registerSale($saleByPromotionAndUser);
 }
 
+/**
+ * @param ECheepAPIInterface $api
+ *
+ * @return \MayakRed\ECheepIntegration\Model\UserPromotion
+ */
+function sampleUserPromotionIssuance(ECheepAPIInterface $api)
+{
+    $promotions = sampleOrganizationPromotions($api);
+    $user = sampleUserByPhone($api);
+    $userPromotionIssuance = new UserPromotionIssuance();
+    $userPromotionIssuance
+        ->setValue(20)
+        ->setUser($user)
+        ->setPromotion($promotions[0])
+        ->setAuthData('some-auth-data');
+
+    return $api->createUserPromotion($userPromotionIssuance);
+}
+
 $api = new ECheepAPI('echeep.mayakdev.ru', 'dns-shop-central-api-key');
 
-sampleSaleByPromotionAndUser($api);
+sampleUserPromotionIssuance($api);
 

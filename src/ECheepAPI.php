@@ -7,6 +7,7 @@ use Httpful\Request as HTTPRequest;
 use Httpful\Response;
 use MayakRed\ECheepIntegration\Exception\BaseException;
 use MayakRed\ECheepIntegration\Exception\NotAnAPIResponseException;
+use MayakRed\ECheepIntegration\Exception\NotEnoughDataException;
 use MayakRed\ECheepIntegration\Model\Promotion;
 use MayakRed\ECheepIntegration\Model\User;
 use MayakRed\ECheepIntegration\Model\UserPromotion;
@@ -169,7 +170,15 @@ class ECheepAPI implements ECheepAPIInterface
      */
     public function createUserPromotion(UserPromotionIssuance $issuance)
     {
-        // TODO: Implement createUserPromotion() method.
+        if ($issuance->getUser() === null || $issuance->getUser()->getId() === null) {
+            throw new NotEnoughDataException('user is null or user->id is null');
+        }
+        $promotionsUrl = sprintf(self::USER_PROMOTIONS, $issuance->getUser()->getId());
+        $response = $this->prepareRequest(Http::POST, $this->getUrl($promotionsUrl))
+            ->body($issuance->serialize(), 'application/json')
+            ->send();
+
+        return UserPromotion::createFromStdClass($this->getSuccessData($response));
     }
 
     /**

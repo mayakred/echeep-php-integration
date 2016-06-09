@@ -8,6 +8,7 @@
  */
 namespace MayakRed\ECheepIntegration\Request;
 
+use MayakRed\ECheepIntegration\Exception\NotEnoughDataException;
 use MayakRed\ECheepIntegration\Model\Promotion;
 use MayakRed\ECheepIntegration\Model\User;
 
@@ -32,6 +33,30 @@ class UserPromotionIssuance
      * @var float
      */
     protected $value;
+
+    /**
+     * @return array
+     */
+    public function serialize()
+    {
+        $data = [
+            'auth_data' => $this->authData,
+            'value' => $this->value,
+        ];
+
+        if ($this->promotion === null) {
+            throw new NotEnoughDataException('promotion is null');
+        }
+        if ($this->promotion->getId() !== null) {
+            $data['promotion_id'] = $this->promotion->getId();
+        } elseif ($this->promotion->getAlias() !== null) {
+            $data['promotion_alias'] = $this->promotion->getAlias();
+        } else {
+            throw new NotEnoughDataException('promotion->id is null and promotion->alias is null');
+        }
+
+        return $data;
+    }
 
     /**
      * @return User
