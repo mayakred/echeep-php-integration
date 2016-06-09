@@ -8,6 +8,7 @@ use Httpful\Response;
 use MayakRed\ECheepIntegration\Exception\BaseException;
 use MayakRed\ECheepIntegration\Exception\NotAnAPIResponseException;
 use MayakRed\ECheepIntegration\Model\User;
+use MayakRed\ECheepIntegration\Model\UserPromotion;
 use MayakRed\ECheepIntegration\Request\Sale;
 use MayakRed\ECheepIntegration\Request\UserPromotionIssuance;
 
@@ -26,6 +27,8 @@ class ECheepAPI implements ECheepAPIInterface
 
     const USER_BY_PHONE_REQUEST = '/user/phone/request';
     const USER_BY_PHONE_CONFIRM = '/user/phone/confirm';
+    const USER_BY_CHIP = '/user/chip';
+    const USER_PROMOTIONS = '/user/%s/promotions';
 
     /**
      * @var string
@@ -65,6 +68,12 @@ class ECheepAPI implements ECheepAPIInterface
         return $baseUrl;
     }
 
+    /**
+     * @param $method
+     * @param $url
+     *
+     * @return HTTPRequest
+     */
     protected function prepareRequest($method, $url)
     {
         return HTTPRequest::init($method)
@@ -128,7 +137,13 @@ class ECheepAPI implements ECheepAPIInterface
      */
     public function getUserByChipUUID($uuid)
     {
-        // TODO: Implement getUserByChipUUID() method.
+        $url = $this->getUrl(self::USER_BY_CHIP, ['chip' => $uuid]);
+        $response = $this->prepareRequest(Http::GET, $url)
+            ->send();
+
+        $data = $this->getSuccessData($response);
+
+        return User::createFromStdClass($data);
     }
 
     /**
@@ -145,6 +160,26 @@ class ECheepAPI implements ECheepAPIInterface
     public function createUserPromotion(UserPromotionIssuance $issuance)
     {
         // TODO: Implement createUserPromotion() method.
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getUserPromotions(User $user)
+    {
+        $promotionsUrl = sprintf(self::USER_PROMOTIONS, $user->getId());
+        $url = $this->getUrl($promotionsUrl);
+        $response = $this->prepareRequest(Http::GET, $url)
+            ->send();
+
+        $data = $this->getSuccessData($response);
+
+        $result = [];
+        foreach ($data as $userPromotionData) {
+            $result[] = UserPromotion::createFromStdClass($userPromotionData);
+        }
+
+        return $result;
     }
 
     /**

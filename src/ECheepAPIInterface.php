@@ -53,6 +53,13 @@ interface ECheepAPIInterface
     public function createUserPromotion(UserPromotionIssuance $issuance);
 
     /**
+     * @param User $user
+     *
+     * @return UserPromotion[]
+     */
+    public function getUserPromotions(User $user);
+
+    /**
      * @return Promotion[]
      */
     public function getOrganizationPromotions();
