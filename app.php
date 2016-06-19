@@ -3,6 +3,7 @@
 require __DIR__ . '/vendor/autoload.php';
 
 use MayakRed\ECheepIntegration\ECheepAPI;
+use MayakRed\ECheepIntegration\Request\Gift;
 use MayakRed\ECheepIntegration\ECheepAPIInterface;
 use MayakRed\ECheepIntegration\Request\SaleByPromotionAndUser;
 use MayakRed\ECheepIntegration\Request\SaleByUserPromotion;
@@ -112,6 +113,27 @@ function sampleUserPromotionIssuance(ECheepAPIInterface $api)
         ->setAuthData('some-auth-data');
 
     return $api->createUserPromotion($userPromotionIssuance);
+}
+
+
+/**
+ * @param ECheepAPIInterface $api
+ *
+ * @return bool
+ */
+function sampleUserGift(ECheepAPIInterface $api)
+{
+    $promotions = sampleOrganizationPromotions($api);
+    $user = sampleUserByPhone($api);
+    $gift = new Gift();
+    $gift
+        ->setValue(20)
+        ->setUser($user)
+        ->setPromotion($promotions[0])
+        ->setAuthData('some-auth-data')
+        ->setExpiresAt(new \DateTime('+4 days'));
+
+    return $api->createUserGift($gift);
 }
 
 $api = new ECheepAPI('echeep.mayakdev.ru', 'dns-shop-central-api-key');
