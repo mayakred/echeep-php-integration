@@ -5,6 +5,7 @@ namespace MayakRed\ECheepIntegration;
 use MayakRed\ECheepIntegration\Model\Promotion;
 use MayakRed\ECheepIntegration\Model\User;
 use MayakRed\ECheepIntegration\Model\UserPromotion;
+use MayakRed\ECheepIntegration\Request\Gift as GiftRequest;
 use MayakRed\ECheepIntegration\Request\Sale;
 use MayakRed\ECheepIntegration\Request\UserPromotionIssuance;
 
@@ -51,6 +52,13 @@ interface ECheepAPIInterface
      * @return UserPromotion
      */
     public function createUserPromotion(UserPromotionIssuance $issuance);
+
+    /**
+     * @param GiftRequest $gift
+     *
+     * @return bool
+     */
+    public function createUserGift(GiftRequest $gift);
 
     /**
      * @param User $user

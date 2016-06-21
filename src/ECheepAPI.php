@@ -11,6 +11,7 @@ use MayakRed\ECheepIntegration\Exception\NotEnoughDataException;
 use MayakRed\ECheepIntegration\Model\Promotion;
 use MayakRed\ECheepIntegration\Model\User;
 use MayakRed\ECheepIntegration\Model\UserPromotion;
+use MayakRed\ECheepIntegration\Request\Gift as GiftRequest;
 use MayakRed\ECheepIntegration\Request\Sale;
 use MayakRed\ECheepIntegration\Request\UserPromotionIssuance;
 
@@ -30,6 +31,7 @@ class ECheepAPI implements ECheepAPIInterface
     const USER_BY_PHONE_REQUEST = '/user/phone/request';
     const USER_BY_PHONE_CONFIRM = '/user/phone/confirm';
     const USER_BY_CHIP = '/user/chip';
+    const USER_GIFT = '/user/%s/gift';
     const USER_PROMOTIONS = '/user/%s/promotions';
     const PROMOTIONS = '/promotions';
     const SALE = '/sale';
@@ -179,6 +181,21 @@ class ECheepAPI implements ECheepAPIInterface
             ->send();
 
         return UserPromotion::createFromStdClass($this->getSuccessData($response));
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function createUserGift(GiftRequest $gift)
+    {
+        $giftUrl = sprintf(self::USER_GIFT, $gift->getUser()->getId());
+        $response = $this->prepareRequest(Http::POST, $this->getUrl($giftUrl))
+            ->body($gift->serialize(), 'application/json')
+            ->send();
+
+        $this->getSuccessData($response);
+
+        return true;
     }
 
     /**
