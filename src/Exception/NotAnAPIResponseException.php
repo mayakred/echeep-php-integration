@@ -6,6 +6,7 @@
  * Date: 09.06.16
  * Time: 12:22.
  */
+
 namespace MayakRed\ECheepIntegration\Exception;
 
 class NotAnAPIResponseException extends \RuntimeException

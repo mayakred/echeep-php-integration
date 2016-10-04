@@ -6,6 +6,7 @@
  * Date: 08.06.16
  * Time: 10:51.
  */
+
 namespace MayakRed\ECheepIntegration\Request;
 
 use MayakRed\ECheepIntegration\Exception\NotEnoughDataException;
@@ -29,7 +30,7 @@ class SaleByPromotionAndUser extends Sale
      */
     public function serialize()
     {
-        $parentData =  parent::serialize();
+        $parentData = parent::serialize();
 
         if ($this->promotion === null) {
             throw new NotEnoughDataException('promotion is null');

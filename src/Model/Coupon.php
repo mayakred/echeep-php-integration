@@ -6,6 +6,7 @@
  * Date: 08.06.16
  * Time: 10:31.
  */
+
 namespace MayakRed\ECheepIntegration\Model;
 
 class Coupon

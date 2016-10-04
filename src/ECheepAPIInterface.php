@@ -8,6 +8,8 @@ use MayakRed\ECheepIntegration\Model\UserPromotion;
 use MayakRed\ECheepIntegration\Request\Gift as GiftRequest;
 use MayakRed\ECheepIntegration\Request\Sale;
 use MayakRed\ECheepIntegration\Request\UserPromotionIssuance;
+use Model\Phone;
+use Model\UserImportData;
 
 /**
  * Created by IntelliJ IDEA.
@@ -71,4 +73,29 @@ interface ECheepAPIInterface
      * @return Promotion[]
      */
     public function getOrganizationPromotions();
+
+    /**
+     * @return bool
+     */
+    public function openImportSession();
+
+    /**
+     * @return bool
+     */
+    public function closeImportSession();
+
+    /**
+     * @param Phone|null $from
+     * @param int|null   $count
+     *
+     * @return User[]
+     */
+    public function getNewUsers(Phone $from = null, $count = null);
+
+    /**
+     * @param UserImportData[] $data
+     *
+     * @return bool
+     */
+    public function importData($data);
 }

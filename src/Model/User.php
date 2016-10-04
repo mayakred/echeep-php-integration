@@ -6,7 +6,10 @@
  * Date: 08.06.16
  * Time: 10:15.
  */
+
 namespace MayakRed\ECheepIntegration\Model;
+
+use Model\Phone;
 
 class User
 {
@@ -39,6 +42,11 @@ class User
      * @var bool
      */
     protected $isConfirmed;
+
+    /**
+     * @var Phone
+     */
+    protected $phone;
 
     /**
      * @param \stdClass $data
@@ -174,6 +182,26 @@ class User
     public function setIsConfirmed($isConfirmed)
     {
         $this->isConfirmed = $isConfirmed;
+
+        return $this;
+    }
+
+    /**
+     * @return Phone
+     */
+    public function getPhone()
+    {
+        return $this->phone;
+    }
+
+    /**
+     * @param Phone $phone
+     *
+     * @return $this
+     */
+    public function setPhone($phone)
+    {
+        $this->phone = $phone;
 
         return $this;
     }

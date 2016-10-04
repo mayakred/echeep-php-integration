@@ -6,6 +6,7 @@
  * Date: 08.06.16
  * Time: 10:54.
  */
+
 namespace MayakRed\ECheepIntegration\Request;
 
 use MayakRed\ECheepIntegration\Exception\NotEnoughDataException;

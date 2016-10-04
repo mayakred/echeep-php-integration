@@ -6,6 +6,7 @@
  * Date: 09.06.16
  * Time: 13:18.
  */
+
 namespace MayakRed\ECheepIntegration\Exception;
 
 class NotEnoughDataException extends \RuntimeException

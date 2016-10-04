@@ -6,6 +6,7 @@
  * Date: 08.06.16
  * Time: 10:16.
  */
+
 namespace MayakRed\ECheepIntegration\Type;
 
 class GenderType

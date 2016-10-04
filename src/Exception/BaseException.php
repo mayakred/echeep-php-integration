@@ -6,6 +6,7 @@
  * Date: 09.06.16
  * Time: 11:52.
  */
+
 namespace MayakRed\ECheepIntegration\Exception;
 
 class BaseException extends \RuntimeException

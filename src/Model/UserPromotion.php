@@ -6,7 +6,10 @@
  * Date: 08.06.16
  * Time: 10:36.
  */
+
 namespace MayakRed\ECheepIntegration\Model;
+
+use MayakRed\ECheepIntegration\Exception\NotEnoughDataException;
 
 class UserPromotion
 {
@@ -54,6 +57,23 @@ class UserPromotion
         }
 
         return $userPromotion;
+    }
+
+    /**
+     * @return array
+     */
+    public function serializeForImport()
+    {
+        $promotionIsNull = $this->getPromotion() == null || $this->getPromotion()->getAlias() === null;
+        if ($promotionIsNull) {
+            throw new NotEnoughDataException('Cant access promotion alias');
+        }
+
+        return [
+            'value' => $this->getRealValue(),
+            'promotion_alias' => $this->getPromotion()->getAlias(),
+            'auth_data' => $this->getAuthData(),
+        ];
     }
 
     /**

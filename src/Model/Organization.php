@@ -6,6 +6,7 @@
  * Date: 08.06.16
  * Time: 10:26.
  */
+
 namespace MayakRed\ECheepIntegration\Model;
 
 class Organization

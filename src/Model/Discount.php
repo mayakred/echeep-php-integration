@@ -6,6 +6,7 @@
  * Date: 08.06.16
  * Time: 10:30.
  */
+
 namespace MayakRed\ECheepIntegration\Model;
 
 class Discount

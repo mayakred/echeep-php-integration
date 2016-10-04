@@ -14,6 +14,8 @@ use MayakRed\ECheepIntegration\Model\UserPromotion;
 use MayakRed\ECheepIntegration\Request\Gift as GiftRequest;
 use MayakRed\ECheepIntegration\Request\Sale;
 use MayakRed\ECheepIntegration\Request\UserPromotionIssuance;
+use Model\Phone;
+use Model\UserImportData;
 
 /**
  * Created by IntelliJ IDEA.
@@ -35,6 +37,10 @@ class ECheepAPI implements ECheepAPIInterface
     const USER_PROMOTIONS = '/user/%s/promotions';
     const PROMOTIONS = '/promotions';
     const SALE = '/sale';
+    const OPEN_IMPORT_SESSION = '/import-session/open';
+    const CLOSE_IMPORT_SESSION = '/import-session/close';
+    const NEW_USERS = '/import-session/users';
+    const IMPORT_DATA = '/import-session/data';
 
     /**
      * @var string
@@ -66,9 +72,9 @@ class ECheepAPI implements ECheepAPIInterface
      */
     protected function getUrl($url, $params = [])
     {
-        $baseUrl = $this->url . self::INTEGRATION_PREFIX . '/v' . self::API_VERSION . $url;
+        $baseUrl = $this->url.self::INTEGRATION_PREFIX.'/v'.self::API_VERSION.$url;
         if (count($params) > 0) {
-            $baseUrl .= '?' . http_build_query($params);
+            $baseUrl .= '?'.http_build_query($params);
         }
 
         return $baseUrl;
@@ -234,5 +240,68 @@ class ECheepAPI implements ECheepAPIInterface
         }
 
         return $result;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function openImportSession()
+    {
+        $response = $this->prepareRequest(Http::POST, $this->getUrl(self::OPEN_IMPORT_SESSION))
+            ->send();
+        $this->getSuccessData($response);
+
+        return true;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function closeImportSession()
+    {
+        $response = $this->prepareRequest(Http::POST, $this->getUrl(self::CLOSE_IMPORT_SESSION))
+            ->send();
+        $this->getSuccessData($response);
+
+        return true;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getNewUsers(Phone $from = null, $count = null)
+    {
+        $response = $this->prepareRequest(Http::GET, $this->getUrl(self::NEW_USERS, [
+            'from' => $from ? $from->getValue() : null,
+            'count' => $count ?: null,
+        ]))->send();
+
+        $data = $this->getSuccessData($response);
+        $result = [];
+        foreach ($data as $phoneValue) {
+            $user = new User();
+            $result[] = $user->setPhone(Phone::createFromString($phoneValue));
+        }
+
+        return $result;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function importData($data)
+    {
+        $payload = array_map(function (UserImportData $item) {
+            return $item->serialize();
+        }, $data);
+        $payload = ['users' => $payload];
+
+        $response = $this->prepareRequest(Http::POST, $this->getUrl(self::IMPORT_DATA))
+            ->body($payload)
+            ->send();
+
+        $this->getSuccessData($response);
+
+        return true;
     }
 }
