@@ -120,7 +120,6 @@ function sampleUserPromotionIssuance(ECheepAPIInterface $api)
     return $api->createUserPromotion($userPromotionIssuance);
 }
 
-<<<<<<< 6dd148af4a43c618318350e6ebcaded228f99d3d
 /**
  * @param ECheepAPIInterface $api
  *
@@ -171,5 +170,3 @@ try {
     }
 }
 $api->importData([$importData]);
-
-$a = 1;
