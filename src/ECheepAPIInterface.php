@@ -8,8 +8,8 @@ use MayakRed\ECheepIntegration\Model\UserPromotion;
 use MayakRed\ECheepIntegration\Request\Gift as GiftRequest;
 use MayakRed\ECheepIntegration\Request\Sale;
 use MayakRed\ECheepIntegration\Request\UserPromotionIssuance;
-use Model\Phone;
-use Model\UserImportData;
+use MayakRed\ECheepIntegration\Model\Phone;
+use MayakRed\ECheepIntegration\Model\UserImportData;
 
 /**
  * Created by IntelliJ IDEA.

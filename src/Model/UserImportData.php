@@ -6,11 +6,9 @@
  * Time: 16:08.
  */
 
-namespace Model;
+namespace MayakRed\ECheepIntegration\Model;
 
 use MayakRed\ECheepIntegration\Exception\NotEnoughDataException;
-use MayakRed\ECheepIntegration\Model\User;
-use MayakRed\ECheepIntegration\Model\UserPromotion;
 
 class UserImportData
 {
@@ -34,7 +32,7 @@ class UserImportData
         }
 
         return [
-            'phone' => $this->user->getPhone(),
+            'phone' => $this->user->getPhone()->getValue(),
             'user_promotions' => array_map(function (UserPromotion $userPromotion) {
                 return $userPromotion->serializeForImport();
             }, $this->userPromotions),

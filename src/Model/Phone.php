@@ -6,7 +6,7 @@
  * Time: 15:56.
  */
 
-namespace Model;
+namespace MayakRed\ECheepIntegration\Model;
 
 class Phone
 {

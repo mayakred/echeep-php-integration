@@ -9,8 +9,6 @@
 
 namespace MayakRed\ECheepIntegration\Model;
 
-use Model\Phone;
-
 class User
 {
     /**

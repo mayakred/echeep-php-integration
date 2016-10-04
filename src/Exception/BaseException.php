@@ -33,4 +33,44 @@ class BaseException extends \RuntimeException
         $this->apiCode = $apiCode;
         parent::__construct($apiStatus, 0, null);
     }
+
+    /**
+     * @return string
+     */
+    public function getApiCode()
+    {
+        return $this->apiCode;
+    }
+
+    /**
+     * @param string $apiCode
+     *
+     * @return $this
+     */
+    public function setApiCode($apiCode)
+    {
+        $this->apiCode = $apiCode;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getApiStatus()
+    {
+        return $this->apiStatus;
+    }
+
+    /**
+     * @param string $apiStatus
+     *
+     * @return $this
+     */
+    public function setApiStatus($apiStatus)
+    {
+        $this->apiStatus = $apiStatus;
+
+        return $this;
+    }
 }

@@ -14,8 +14,8 @@ use MayakRed\ECheepIntegration\Model\UserPromotion;
 use MayakRed\ECheepIntegration\Request\Gift as GiftRequest;
 use MayakRed\ECheepIntegration\Request\Sale;
 use MayakRed\ECheepIntegration\Request\UserPromotionIssuance;
-use Model\Phone;
-use Model\UserImportData;
+use MayakRed\ECheepIntegration\Model\Phone;
+use MayakRed\ECheepIntegration\Model\UserImportData;
 
 /**
  * Created by IntelliJ IDEA.
@@ -297,7 +297,7 @@ class ECheepAPI implements ECheepAPIInterface
         $payload = ['users' => $payload];
 
         $response = $this->prepareRequest(Http::POST, $this->getUrl(self::IMPORT_DATA))
-            ->body($payload)
+            ->body($payload, 'application/json')
             ->send();
 
         $this->getSuccessData($response);
